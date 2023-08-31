@@ -1,0 +1,59 @@
+{
+  "GET": "localhost:9200/restaurantes/_search",
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "bool": {
+            "should": [
+              {
+                "match": {
+                  "direccion": "centro"
+                }
+              },
+              {
+                "match": {
+                  "direccion": "occidental"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "bool": {
+            "should": [
+              {
+                "nested": {
+                  "path": "categorias",
+                  "query": {
+                    "bool": {
+                      "must": {
+                        "term": {
+                          "categorias.nombre": "Comida Rapida"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "nested": {
+                  "path": "platos",
+                  "query": {
+                    "bool": {
+                      "must": {
+                        "match": {
+                          "platos.descripcion": "Nachos"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
